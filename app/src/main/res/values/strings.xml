@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">To do list</string>
+    <string name="add_task">Criar tarefa</string>
+    <string name="hint_title_add_task">Título</string>
+    <string name="hint_data_add_task">Data</string>
+    <string name="hint_description_add_task">Descreva aqui a tarefa</string>
+    <string name="hint_time_add_task">Hora</string>
+    <string name="btn_add_taks">Criar Tarefa</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="fab_description">Nova tarefa</string>
+    <string name="title_app">Tarefas</string>
+    <string name="popup_edit">Editar</string>
+    <string name="popup_delete">Excluir</string>
+    <string name="btn_edit_task">Editar Tarefa</string>
+    <string name="dialog_yes">Sim</string>
+
+    <string name="you_dont_have_tasks">Você não possui\n nenhuma tarefa</string>
+</resources>
