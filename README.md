@@ -6,6 +6,7 @@ Toda a lógica para criação, edição, exclusão e listagem de tarefas conform
 ### Mudanças!
 - [x] Ao invés de usar o ListAdapter preferi utilizar o RecyclerView.Adapter
 - [x] Incluí um dialog para confirmar a exclusão por acidente.
+- [x] Inclusão do compontente de navegação com safeargs e fragments
 
 
 ### Próximas features
