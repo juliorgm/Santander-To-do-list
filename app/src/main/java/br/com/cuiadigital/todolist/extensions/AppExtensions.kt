@@ -11,7 +11,7 @@ fun Date.format(): String{
 }
 
 var TextInputLayout.text : String
-    get() = editText?.text.toString() ?: ""
+    get() = editText?.text.toString()
     set(value){
         editText?.setText(value)
     }

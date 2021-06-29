@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/listTaskFragment">
+
+    <fragment
+        android:id="@+id/formTaskFragment"
+        android:name="br.com.cuiadigital.todolist.ui.form_task.FormTaskFragment"
+        android:label="fragment_form_task"
+        tools:layout="@layout/fragment_form_task" >
+        <action
+            android:id="@+id/action_formTaskFragment_to_listTaskFragment"
+            app:destination="@id/listTaskFragment" />
+        <argument
+            android:name="task"
+            app:argType="br.com.cuiadigital.todolist.model.Task"
+            android:defaultValue="@null"
+            app:nullable="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/listTaskFragment"
+        android:name="br.com.cuiadigital.todolist.ui.list_task.ListTaskFragment"
+        android:label="fragment_list_task"
+        tools:layout="@layout/fragment_list_task" >
+
+        <action
+            android:id="@+id/action_listTaskFragment_to_formTaskFragment"
+            app:destination="@id/formTaskFragment"
+            app:enterAnim="@anim/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            />
+    </fragment>
+</navigation>

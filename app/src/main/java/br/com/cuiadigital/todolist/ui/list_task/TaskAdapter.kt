@@ -1,10 +1,8 @@
-package br.com.cuiadigital.todolist.ui.adapter
+package br.com.cuiadigital.todolist.ui.list_task
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.cuiadigital.todolist.R
 import br.com.cuiadigital.todolist.databinding.ItemTaskBinding

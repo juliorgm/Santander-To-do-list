@@ -4,8 +4,8 @@ import br.com.cuiadigital.todolist.model.Task
 
 object TaskDataSource {
     private val list = mutableListOf<Task>(
-//        Task("Café", "12/07/2021", "18:00", 1),
-//        Task("Café", "12/07/2021", "18:00", 2)
+        Task(title ="Café", date ="12/07/2021", hour = "18:00", id = 1),
+        Task(title = "Café", date ="12/07/2021", hour = "18:00", id = 2)
     )
 
     fun getList() = list.toList()
