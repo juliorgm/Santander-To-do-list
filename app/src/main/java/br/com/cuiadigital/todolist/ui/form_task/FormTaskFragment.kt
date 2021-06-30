@@ -1,15 +1,14 @@
 package br.com.cuiadigital.todolist.ui.form_task
 
-import android.app.Activity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import br.com.cuiadigital.todolist.R
 import br.com.cuiadigital.todolist.databinding.FragmentFormTaskBinding
-import br.com.cuiadigital.todolist.databinding.FragmentListTaskBinding
 import br.com.cuiadigital.todolist.datasource.TaskDataSource
 import br.com.cuiadigital.todolist.extensions.format
 import br.com.cuiadigital.todolist.extensions.text
@@ -21,12 +20,10 @@ import java.util.*
 
 class FormTaskFragment : Fragment() {
     private lateinit var binding: FragmentFormTaskBinding
-    private lateinit var task: Task
+    private val viewModel: FormTaskViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         setHasOptionsMenu(true)
     }
 
@@ -34,7 +31,7 @@ class FormTaskFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentFormTaskBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -42,22 +39,33 @@ class FormTaskFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         insertListeners()
+        initObserver()
 
         arguments?.let {
-            task = it.getParcelable<Task>(TASK_ID) ?: Task()
+            val task = it.getParcelable(TASK_ID) ?: Task()
 
             if (isEditable(task))   {
-                loadTaskInForm(task)
                 binding.btnAddTask.text = getString(R.string.btn_edit_task)
+                viewModel.updateTask(task)
+            }
+
+            if (!it.getString(TITLE).isNullOrEmpty()){
+                val title= it.getString(TITLE) ?: ""
+                val date= it.getString(DATE) ?: ""
+                val hour= it.getString(HOUR) ?: ""
+                viewModel.updateTask(title= title, date= date, hour= hour )
             }
         }
     }
 
+    fun initObserver(){
+        viewModel.task.observe(viewLifecycleOwner, {
+            loadTaskInForm(it)
+        })
+    }
+
     private fun isEditable(task: Task): Boolean {
-        return when (task.id){
-            NEW_TASK -> return false
-            else -> return true
-        }
+        return if (task.id == NEW_TASK) false else  true
     }
 
     private fun insertListeners() {
@@ -89,18 +97,17 @@ class FormTaskFragment : Fragment() {
 
         binding.btnAddTask.setOnClickListener {
             getTaskFromForm()
-            TaskDataSource.insertTask(task)
+            viewModel.saveTask()
             goToListTasks()
         }
 
         binding.btnCancel.setOnClickListener {
             goToListTasks()
         }
-
     }
 
     private fun goToListTasks() {
-        view?.let { it.findNavController().navigate(R.id.action_formTaskFragment_to_listTaskFragment) }
+        view?.findNavController()?.navigate(R.id.action_formTaskFragment_to_listTaskFragment)
     }
 
     private fun loadTaskInForm(task: Task) {
@@ -110,15 +117,25 @@ class FormTaskFragment : Fragment() {
     }
 
     private fun getTaskFromForm() {
-        task.title = binding.tilTitle.text
-        task.date = binding.tilDate.text
-        task.hour = binding.tilTime.text
+        viewModel.updateTask(title = binding.tilTitle.text, hour= binding.tilDate.text, date= binding.tilTime.text)
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        arguments.let {
+            it?.putString(TITLE, binding.tilTitle.text)
+            it?.putString(DATE, binding.tilDate.text)
+            it?.putString(HOUR, binding.tilTime.text)
+        }
     }
 
     companion object{
-        val TASK_ID = "task"
-        private val DATEPICKER_TAG = "DATEPICKER_TAG"
-        private val TIMEPICKER_TAG = "TIMEPICKER_TAG"
+        const val TASK_ID = "task"
+        private const val DATEPICKER_TAG = "DATEPICKER_TAG"
         private const val NEW_TASK = 0
+        private const val TITLE = "TITLE"
+        private const val DATE = "DATE"
+        private const val HOUR = "HOUR"
     }
 }

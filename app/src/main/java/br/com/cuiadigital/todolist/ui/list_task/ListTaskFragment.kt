@@ -1,10 +1,12 @@
 package br.com.cuiadigital.todolist.ui.list_task
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.cuiadigital.todolist.R
@@ -14,15 +16,15 @@ import br.com.cuiadigital.todolist.model.Task
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ListTaskFragment : Fragment() {
-
     private lateinit var binding: FragmentListTaskBinding
     private lateinit var adapter : TaskAdapter
+    private val viewModel: ListTaskViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentListTaskBinding.inflate(inflater, container,false)
         return binding.root
     }
@@ -35,13 +37,19 @@ class ListTaskFragment : Fragment() {
         binding.rvTasks.adapter = adapter
 
         insertListerner()
-        updateList()
+        initObserver()
     }
 
-    private fun updateList() {
-        val list = TaskDataSource.getList()
+    private fun updateList(list: List<Task>) {
         binding.layoutEmptyState.emptyState.visibility = if(list.isEmpty()) View.VISIBLE else View.GONE
         adapter.updateList(list)
+    }
+
+    fun initObserver(){
+        viewModel.tasklist.observe(viewLifecycleOwner, {
+            updateList(it)
+            Log.d("listtaskfragment","observer")
+        })
     }
 
     private fun insertListerner() {
@@ -50,7 +58,7 @@ class ListTaskFragment : Fragment() {
         }
         adapter.listenerEdit = { task ->
             val action = ListTaskFragmentDirections.actionListTaskFragmentToFormTaskFragment(task = task)
-            view?.let { it.findNavController().navigate(action) }
+            view?.findNavController()?.navigate(action)
         }
         adapter.listenerDelete = {
             showDialog(it)
@@ -58,7 +66,7 @@ class ListTaskFragment : Fragment() {
     }
 
     private fun deleteTask(it: Task) {
-        TaskDataSource.delete(it)
+        viewModel.deleteTask(it)
         adapter.updateList(TaskDataSource.getList())
     }
 

@@ -12,7 +12,7 @@ class TaskAdapter: RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
     var listenerEdit : (Task) -> Unit = {}
     var listenerDelete: (Task) -> Unit = {}
 
-    val list = mutableListOf<Task>()
+    private val list = mutableListOf<Task>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val view = LayoutInflater.from(parent.context)
