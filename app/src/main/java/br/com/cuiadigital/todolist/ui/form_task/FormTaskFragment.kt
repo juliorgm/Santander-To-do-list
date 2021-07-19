@@ -5,14 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import br.com.cuiadigital.todolist.R
+import br.com.cuiadigital.todolist.TaskApplication
 import br.com.cuiadigital.todolist.databinding.FragmentFormTaskBinding
-import br.com.cuiadigital.todolist.datasource.TaskDataSource
 import br.com.cuiadigital.todolist.extensions.format
 import br.com.cuiadigital.todolist.extensions.text
 import br.com.cuiadigital.todolist.model.Task
+import br.com.cuiadigital.todolist.ui.list_task.TaskViewModel
+import br.com.cuiadigital.todolist.ui.list_task.TaskViewModelFactory
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -20,7 +22,11 @@ import java.util.*
 
 class FormTaskFragment : Fragment() {
     private lateinit var binding: FragmentFormTaskBinding
-    private val viewModel: FormTaskViewModel by viewModels()
+    private val viewModel: TaskViewModel by activityViewModels{
+        TaskViewModelFactory(
+            (activity?.application as TaskApplication).repository
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +53,7 @@ class FormTaskFragment : Fragment() {
             if (isEditable(task))   {
                 binding.btnAddTask.text = getString(R.string.btn_edit_task)
                 viewModel.updateTask(task)
+                viewModel.isEditable.value = true
             }
 
             if (!it.getString(TITLE).isNullOrEmpty()){
@@ -97,7 +104,10 @@ class FormTaskFragment : Fragment() {
 
         binding.btnAddTask.setOnClickListener {
             getTaskFromForm()
-            viewModel.saveTask()
+
+            if (viewModel.isEditable.value == true)  viewModel.update()
+            else  viewModel.insert()
+
             goToListTasks()
         }
 
@@ -107,6 +117,7 @@ class FormTaskFragment : Fragment() {
     }
 
     private fun goToListTasks() {
+        view?.findNavController()?.popBackStack(R.id.action_formTaskFragment_to_listTaskFragment, false)
         view?.findNavController()?.navigate(R.id.action_formTaskFragment_to_listTaskFragment)
     }
 
@@ -116,8 +127,14 @@ class FormTaskFragment : Fragment() {
         binding.tilTime.text = task.hour
     }
 
+    private fun cleanForm() {
+        binding.tilTitle.text = ""
+        binding.tilDate.text = ""
+        binding.tilTime.text = ""
+    }
+
     private fun getTaskFromForm() {
-        viewModel.updateTask(title = binding.tilTitle.text, hour= binding.tilDate.text, date= binding.tilTime.text)
+        viewModel.updateTask(title = binding.tilTitle.text, hour= binding.tilTime.text, date= binding.tilDate.text)
     }
 
 

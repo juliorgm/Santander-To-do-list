@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_form_task" >
         <action
             android:id="@+id/action_formTaskFragment_to_listTaskFragment"
-            app:destination="@id/listTaskFragment" />
+            app:destination="@id/listTaskFragment"
+            app:popUpTo="@id/listTaskFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="task"
             app:argType="br.com.cuiadigital.todolist.model.Task"
@@ -30,6 +32,6 @@
             app:destination="@id/formTaskFragment"
             app:enterAnim="@anim/nav_default_pop_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
-            />
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>
