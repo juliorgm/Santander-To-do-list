@@ -42,7 +42,7 @@ class ListTaskFragment : Fragment() {
         insertListerner()
 
         lifecycle.coroutineScope.launch {
-            viewModel.getAllTasks().collect() {
+            viewModel.getAllTasks().collect {
                 updateList(it)
             }
         }

@@ -72,7 +72,7 @@ class FormTaskFragment : Fragment() {
     }
 
     private fun isEditable(task: Task): Boolean {
-        return if (task.id == NEW_TASK) false else  true
+        return task.id != NEW_TASK
     }
 
     private fun insertListeners() {
