@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class ListTaskFragment : Fragment() {
     private lateinit var binding: FragmentListTaskBinding
     private lateinit var adapter: TaskAdapter
-    private val viewModel: TaskViewModel by activityViewModels {
+    private val viewModel: ListTaskViewModel by activityViewModels {
         TaskViewModelFactory(
             (activity?.application as TaskApplication).repository
         )

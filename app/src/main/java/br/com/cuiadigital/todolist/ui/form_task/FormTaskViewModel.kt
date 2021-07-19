@@ -1,19 +1,17 @@
-package br.com.cuiadigital.todolist.ui.list_task
+package br.com.cuiadigital.todolist.ui.form_task
 
 import androidx.lifecycle.*
 import br.com.cuiadigital.todolist.data.TaskRepository
 import br.com.cuiadigital.todolist.model.Task
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class TaskViewModel(private val repository: TaskRepository): ViewModel(){
+class FormTaskViewModel(private val repository: TaskRepository): ViewModel(){
 
     private val _task = MutableLiveData<Task>()
     val task: LiveData<Task>
         get() = _task
 
     val isEditable = MutableLiveData<Boolean>()
-
 
     init {
         loadValues()
@@ -23,8 +21,6 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(){
         _task.value = Task()
         isEditable.value = false
     }
-
-    fun getAllTasks(): Flow<List<Task>> = repository.getAllTasks()
 
     fun insert() {
         viewModelScope.launch { task.value?.let { repository.insert(it) } }
@@ -48,15 +44,13 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(){
     fun updateTask(task: Task){
         _task.value = task
     }
-
 }
 
-
-class TaskViewModelFactory(private val repository: TaskRepository): ViewModelProvider.Factory {
+class FormTaskViewModelFactory(private val repository: TaskRepository): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(TaskViewModel::class.java)){
+        if (modelClass.isAssignableFrom(FormTaskViewModel::class.java)){
             @Suppress("UNCHECKED_LIST")
-            return TaskViewModel(repository = repository) as T
+            return FormTaskViewModel(repository = repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel Class")
     }

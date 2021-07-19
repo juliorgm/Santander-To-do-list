@@ -13,8 +13,6 @@ import br.com.cuiadigital.todolist.databinding.FragmentFormTaskBinding
 import br.com.cuiadigital.todolist.extensions.format
 import br.com.cuiadigital.todolist.extensions.text
 import br.com.cuiadigital.todolist.model.Task
-import br.com.cuiadigital.todolist.ui.list_task.TaskViewModel
-import br.com.cuiadigital.todolist.ui.list_task.TaskViewModelFactory
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -22,8 +20,8 @@ import java.util.*
 
 class FormTaskFragment : Fragment() {
     private lateinit var binding: FragmentFormTaskBinding
-    private val viewModel: TaskViewModel by activityViewModels{
-        TaskViewModelFactory(
+    private val viewModel: FormTaskViewModel by activityViewModels{
+        FormTaskViewModelFactory(
             (activity?.application as TaskApplication).repository
         )
     }
@@ -136,7 +134,6 @@ class FormTaskFragment : Fragment() {
     private fun getTaskFromForm() {
         viewModel.updateTask(title = binding.tilTitle.text, hour= binding.tilTime.text, date= binding.tilDate.text)
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

@@ -3,7 +3,8 @@ package br.com.cuiadigital.todolist.model
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
+
 
 @Parcelize
 @Entity
@@ -14,7 +15,6 @@ data class Task (
     @PrimaryKey(autoGenerate = true)
     val id:Int = 0
     ) : Parcelable{
-
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
