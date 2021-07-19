@@ -31,10 +31,6 @@ class FormTaskViewModel(private val repository: TaskRepository): ViewModel(){
         loadValues()
     }
 
-    fun delete(task: Task) {
-        viewModelScope.launch { repository.delete(task) }
-    }
-
     fun updateTask(title: String, date: String, hour: String){
         _task.value?.title = title
         _task.value?.date = date

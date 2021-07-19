@@ -115,7 +115,7 @@ class FormTaskFragment : Fragment() {
     }
 
     private fun goToListTasks() {
-        view?.findNavController()?.popBackStack(R.id.action_formTaskFragment_to_listTaskFragment, false)
+        viewModel.updateTask(Task())
         view?.findNavController()?.navigate(R.id.action_formTaskFragment_to_listTaskFragment)
     }
 
@@ -123,12 +123,6 @@ class FormTaskFragment : Fragment() {
         binding.tilTitle.text = task.title
         binding.tilDate.text = task.date
         binding.tilTime.text = task.hour
-    }
-
-    private fun cleanForm() {
-        binding.tilTitle.text = ""
-        binding.tilDate.text = ""
-        binding.tilTime.text = ""
     }
 
     private fun getTaskFromForm() {
